@@ -49,11 +49,16 @@ namespace WebAddressbookTests
             FillGroupForm(group);
             SubmitGroupCreation();
             ReturnToGroupsPage();
+            Logout();
         }
 
         private void ReturnToGroupsPage()
         {
             driver.FindElement(By.LinkText("groups")).Click();
+        }
+
+        private void Logout()
+        {
             driver.FindElement(By.LinkText("Logout")).Click();
         }
 
