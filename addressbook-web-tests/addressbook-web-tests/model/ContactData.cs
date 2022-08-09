@@ -2,8 +2,8 @@
 {
     public class ContactData
     {
-        private string firsName="";
-        private string middleName="";
+        private string firsName = "";
+        private string middleName = "";
         private string lastName = "";
         private string nickname = "";
         private string photo;
@@ -28,8 +28,8 @@
 
         public ContactData(string name, string surname)
         {
-            this.firsName = name;
-            this.middleName = surname;
+            firsName = name;
+            middleName = surname;
         }
 
         public string Group
