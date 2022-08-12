@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "addressbook_web_tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

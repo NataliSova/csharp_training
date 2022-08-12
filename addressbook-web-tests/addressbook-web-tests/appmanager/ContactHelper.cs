@@ -11,12 +11,46 @@ namespace WebAddressbookTests
         {
         }
 
-        internal ContactHelper Create(ContactData contactData)
+        public ContactHelper Create(ContactData contactData)
         {
             manager.Navigator.GoToContactPage();
             InitNewContactCreation(contactData);
             SubmitContactCreation();
             manager.Navigator.ReturnToHomePage();
+            return this;
+        }
+
+        public ContactHelper Modify(int c, ContactData contactData)
+        {
+            manager.Navigator.OpenHomePage();
+            EditSelectContact(c);
+            InitNewContactCreation(contactData);
+            SubmitContactUpdate();
+            manager.Navigator.ReturnToHomePage();
+            return this;
+        }
+        public ContactHelper Remove(int c)
+        {
+            manager.Navigator.OpenHomePage();
+            EditSelectContact(c);
+            SubmitContactDelete();
+            return this;
+        }
+        private ContactHelper SubmitContactDelete()
+        {
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            return this;
+        }
+
+        private ContactHelper SubmitContactUpdate()
+        {
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
+
+        private ContactHelper EditSelectContact(int index)
+        {
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ index +"]/td[8]/a/img")).Click();
             return this;
         }
 
@@ -44,7 +78,7 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("title")).Click();
             driver.FindElement(By.Name("title")).Clear();
             driver.FindElement(By.Name("title")).SendKeys(contactData.Title);
-            driver.FindElement(By.Name("theform")).Click();
+            //driver.FindElement(By.Name("theform")).Click();
             driver.FindElement(By.Name("company")).Click();
             driver.FindElement(By.Name("company")).Clear();
             driver.FindElement(By.Name("company")).SendKeys(contactData.Company);
