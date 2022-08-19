@@ -76,19 +76,11 @@ namespace WebAddressbookTests
 
         public GroupHelper SelectGroup(int index)
         {
-            if (!IsSelectedGroup())
-            {
-                GroupData group = new GroupData("aaa");
-                group.Header = "bbb";
-                group.Footer = "ccc";
-
-                Create(group);
-            }
             driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + "]/input")).Click();
             return this;
         }
 
-        private bool IsSelectedGroup()
+        public bool IsSelectedGroup()
         {
             return IsElementPresent(By.Name("selected[]"));
         }

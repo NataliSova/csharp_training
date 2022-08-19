@@ -50,16 +50,11 @@ namespace WebAddressbookTests
 
         private ContactHelper EditSelectContact(int index)
         {
-             if (!IsSelectedContact())
-            {
-                ContactData contactData = new ContactData("First111 name", "Middle222 name");
-                Create(contactData);
-            }
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ index +"]/td[8]/a/img")).Click();
             return this;
         }
 
-        private bool IsSelectedContact()
+        public bool IsSelectedContact()
         {
             return IsElementPresent(By.Name("entry"));
         }
