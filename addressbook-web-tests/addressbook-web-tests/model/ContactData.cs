@@ -1,8 +1,10 @@
-﻿namespace WebAddressbookTests
+﻿using System;
+
+namespace WebAddressbookTests
 {
-    public class ContactData
+    public class ContactData: IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string firsName = "";
+        private string firstName = "";
         private string middleName = "";
         private string lastName = "";
         private string nickname = "";
@@ -28,8 +30,8 @@
 
         public ContactData(string name, string surname)
         {
-            firsName = name;
-            middleName = surname;
+            firstName = name;
+            lastName = surname;
         }
 
         public string Group
@@ -38,10 +40,10 @@
             set { group = value; }
         }
 
-        public string FirsName
+        public string FirstName
         {
-            get { return firsName; }
-            set { firsName = value; }
+            get { return firstName; }
+            set { firstName = value; }
         }
 
         public string MiddleName
@@ -166,5 +168,44 @@
         }
 
         public string Year { get => year; set => year = value; }
+
+        public bool Equals(ContactData other)
+        {
+            if(Object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if(Object.ReferenceEquals(this, other)) 
+            {
+                return true;
+            }
+            return FirstName.Equals(other.FirstName) && LastName.Equals(other.LastName);
+        }
+
+        public override int GetHashCode()
+        {
+            return FirstName.GetHashCode() ^ LastName.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("FirstName:{0}, LastName:{1}", FirstName, LastName);
+        }
+
+        public int CompareTo(ContactData other)
+        {
+            if (Object.ReferenceEquals(other, null))
+            {
+                return 1;
+            }
+            if (Object.ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+            int i = FirstName.CompareTo(other.FirstName);
+            if(i != 0) return i;
+
+            return other.LastName.CompareTo(LastName);
+        }
     }
 }

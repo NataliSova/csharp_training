@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebAddressbookTests
 {
@@ -20,6 +22,28 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public List<ContactData> GetContactList()
+        {
+            manager.Navigator.OpenHomePage();
+
+            List<ContactData> contactList = new List<ContactData>();
+
+            ICollection<IWebElement> contacts = driver.FindElements(By.XPath("//tr[@name='entry']"));
+
+            foreach (IWebElement contact in contacts)
+            {
+                ICollection<IWebElement> listTdElem = contact.FindElements(By.CssSelector("td"));
+               
+                List<string> list = new List<string>();
+                foreach (var elemTd in listTdElem)
+                {
+                    list.Add(elemTd.Text);
+                }
+                if (list.Count > 0) contactList.Add(new ContactData(list[2], list[1]));
+            }
+            return contactList;
+        }
+        
         public ContactHelper Modify(int c, ContactData contactData)
         {
             manager.Navigator.OpenHomePage();
@@ -50,7 +74,7 @@ namespace WebAddressbookTests
 
         private ContactHelper EditSelectContact(int index)
         {
-            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ index +"]/td[8]/a/img")).Click();
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (index+2) +"]/td[8]/a/img")).Click();
             return this;
         }
 
@@ -67,7 +91,7 @@ namespace WebAddressbookTests
 
         public ContactHelper InitNewContactCreation(ContactData contactData)
         {
-            Type(By.Name("firstname"), contactData.FirsName);
+            Type(By.Name("firstname"), contactData.FirstName);
             Type(By.Name("middlename"), contactData.MiddleName);
             Type(By.Name("lastname"), contactData.LastName);
             Type(By.Name("nickname"), contactData.Nickname);
