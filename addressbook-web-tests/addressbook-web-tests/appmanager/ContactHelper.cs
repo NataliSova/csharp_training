@@ -22,28 +22,50 @@ namespace WebAddressbookTests
             return this;
         }
 
+        private List<ContactData> contactCache = null;
+
         public List<ContactData> GetContactList()
         {
-            manager.Navigator.OpenHomePage();
-
-            List<ContactData> contactList = new List<ContactData>();
-
-            ICollection<IWebElement> contacts = driver.FindElements(By.XPath("//tr[@name='entry']"));
-
-            foreach (IWebElement contact in contacts)
+            if(contactCache == null)
             {
-                ICollection<IWebElement> listTdElem = contact.FindElements(By.CssSelector("td"));
-               
-                List<string> list = new List<string>();
-                foreach (var elemTd in listTdElem)
+                manager.Navigator.OpenHomePage();
+
+                contactCache = new List<ContactData>();
+
+                ICollection<IWebElement> contacts = driver.FindElements(By.XPath("//tr[@name='entry']"));
+
+                foreach (IWebElement contact in contacts)
                 {
-                    list.Add(elemTd.Text);
+                    ICollection<IWebElement> listTdElem = contact.FindElements(By.CssSelector("td"));
+
+                    List<string> list = new List<string>();
+                    int count = 0;
+                    foreach (var elemTd in listTdElem)
+                    {
+                        if(count == 0)
+                        {
+                            list.Add(elemTd.FindElement(By.TagName("input")).GetAttribute("id"));
+                        }
+
+                        list.Add(elemTd.Text);
+                        count++;
+                    }
+                    if (list.Count > 0)
+                        contactCache.Add(new ContactData(list[3], list[2])
+                        {
+                            Id = list[0]
+                        });
                 }
-                if (list.Count > 0) contactList.Add(new ContactData(list[2], list[1]));
             }
-            return contactList;
+            return new List<ContactData>(contactCache);
         }
-        
+
+        public int GetContactCount()
+        {
+            manager.Navigator.OpenHomePage();
+            return driver.FindElements(By.XPath("//tr[@name='entry']")).Count;
+        }
+
         public ContactHelper Modify(int c, ContactData contactData)
         {
             manager.Navigator.OpenHomePage();
@@ -63,12 +85,14 @@ namespace WebAddressbookTests
         private ContactHelper SubmitContactDelete()
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            contactCache = null;
             return this;
         }
 
         private ContactHelper SubmitContactUpdate()
         {
             driver.FindElement(By.Name("update")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -86,6 +110,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[21]")).Click();
+            contactCache = null;
             return this;
         }
 

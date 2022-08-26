@@ -24,13 +24,25 @@ namespace WebAddressbookTests.test
 
             List<GroupData> oldgroups = app.Groups.GetGroupList();
 
+            GroupData oldData = oldgroups[0];
+
             app.Groups.Modify(0, newdata);
+
+            Assert.AreEqual(oldgroups.Count, app.Groups.GetGroupCount());
 
             List<GroupData> newgroups = app.Groups.GetGroupList();
             oldgroups[0].Name = newdata.Name;
             oldgroups.Sort();
             newgroups.Sort();
             Assert.AreEqual(oldgroups, newgroups);
+
+            foreach(GroupData group in newgroups)
+            {
+                if(group.Id == oldData.Id)
+                {
+                    Assert.AreEqual(newdata.Name, group.Name);
+                }
+            }
         }
     }
 }
