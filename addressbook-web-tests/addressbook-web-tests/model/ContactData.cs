@@ -6,6 +6,7 @@ namespace WebAddressbookTests
     { 
         private string year = "2000";
         private string allPhones;
+        private string allEmails;
 
         public ContactData(string name, string surname)
         {
@@ -13,7 +14,24 @@ namespace WebAddressbookTests
             LastName = surname;
         }
 
-        public string AllEmails { get; set; }
+        public string AllEmails 
+        {
+            get
+            {
+                if(allEmails != null)
+                {
+                    return allEmails;
+                }
+                else
+                {
+                    return (CleanUp(Email) + CleanUp(Email2) + CleanUp(Email3)).Trim();
+                }
+            }
+            set
+            {
+                allEmails = value;
+            }
+        }
 
         public string AllPhones 
         {

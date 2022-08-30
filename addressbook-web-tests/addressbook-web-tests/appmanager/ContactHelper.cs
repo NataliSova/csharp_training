@@ -29,14 +29,21 @@ namespace WebAddressbookTests
             string firstName = cells[2].Text;
             string address = cells[3].Text;
             string allPhone = cells[5].Text;
-            //string allEmail = cells[4].Text;
+            string allEmail = cells[4].Text;
 
             return new ContactData(firstName, lastName)
             {
                 Address = address,
                 AllPhones = allPhone,
-                //AllEmails = allEmail
+                AllEmails = allEmail
             };
+
+        }
+
+        internal ContactData GetContactInformationFromDetails(int index)
+        {
+            manager.Navigator.OpenHomePage();
+            throw new NotImplementedException();
 
         }
 
@@ -63,10 +70,17 @@ namespace WebAddressbookTests
                 HomePhone = homePhone,
                 MobilePhone = mobilePhone,
                 WorkPhone = workPhone,
-                //Email = email,
-                //Email2 = email2,
-                //Email3 = email3
+                Email = email,
+                Email2 = email2,
+                Email3 = email3
             };
+        }
+
+        private void InitContactDetails(int index)
+        {
+            driver.FindElements(By.Name("entry"))[index]
+                .FindElements(By.TagName("td"))[6]
+                .FindElement(By.TagName("a")).Click();
         }
 
         public void InitContactModification(int index)
