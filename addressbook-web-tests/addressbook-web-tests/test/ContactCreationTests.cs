@@ -10,11 +10,13 @@ namespace WebAddressbookTests.test
         [Test]
         public void ContactCreationTest()
         {
-            ContactData contactData = new ContactData("First name", "Last name");
+            ContactData contactData = new ContactData("First", "Last");
 
             List<ContactData> oldContacts = app.Contacts.GetContactList();
-
-            ContactData oldContact = oldContacts[0];
+            if (oldContacts.Count != 0)
+            {
+                ContactData oldContact = oldContacts[0];
+            }
 
             app.Contacts.Create(contactData);
 

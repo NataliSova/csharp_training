@@ -1,17 +1,47 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
 {
     public class ContactData: IEquatable<ContactData>, IComparable<ContactData>
     { 
-        private string year = "2000";
         private string allPhones;
         private string allEmails;
+        private string allData;
 
         public ContactData(string name, string surname)
         {
             FirstName = name;
             LastName = surname;
+        }
+
+        public string AllData
+        {
+            get
+            {
+                if (allData != null)
+                {
+                    return allData;
+                }
+                else
+                {
+                    if (HomePhone != "" && MobilePhone != "" && WorkPhone != "" && Email != "" && Email2 != "" && Email3 != "" && Address != "")
+                    {
+                        return (FirstName + CleanUp(LastName) + "\r\n" + CleanUp(Address) + "\r\n"
+                        + "H:" + CleanUp(HomePhone) + "M:" + CleanUp(MobilePhone) + "W:" + CleanUp(WorkPhone) + "\r\n"
+                        + CleanUp(Email) + CleanUp(Email2) + CleanUp(Email3)
+                        ).Trim();
+                    }
+                    else
+                    {
+                        return (FirstName + CleanUp(LastName)).Trim();
+                    }
+                }
+            }
+            set
+            {
+                allData = value;
+            }
         }
 
         public string AllEmails 
@@ -58,7 +88,7 @@ namespace WebAddressbookTests
             {
                 return "";
             }
-            return phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "") + "\r\n";
+            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
 
         public string Group { get; set; }
@@ -107,7 +137,7 @@ namespace WebAddressbookTests
 
         public string SecondaryNotes { get; set; }
 
-        public string Year { get => year; set => year = value; }
+        public string Year { get; set; }
 
         public bool Equals(ContactData other)
         {

@@ -9,7 +9,7 @@ namespace WebAddressbookTests.test
         [Test]
         public void ContactRemovalTest()
         {
-            ContactData contactData = new ContactData("First111 name", "Middle222 name");
+            ContactData contactData = new ContactData("First111", "Middle222");
 
             if (!app.Contacts.IsSelectedContact())
             {

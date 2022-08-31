@@ -11,10 +11,10 @@ namespace WebAddressbookTests.test
         {
             if (!app.Contacts.IsSelectedContact())
             {
-                ContactData contact = new ContactData("First333 name", "Last333 name");
+                ContactData contact = new ContactData("First333", "Last333");
                 app.Contacts.Create(contact);
             }
-            ContactData contactData = new ContactData("First444 name", "Last444 name");
+            ContactData contactData = new ContactData("First444", "Last444");
 
             List<ContactData> oldContacts = app.Contacts.GetContactList();
 
