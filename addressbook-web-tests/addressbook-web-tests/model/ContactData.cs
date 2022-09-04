@@ -21,21 +21,24 @@ namespace WebAddressbookTests
             {
                 if (allData != null)
                 {
-                    return allData;
+                    return Regex.Replace(allData, "\\r\\n", "").Trim();
                 }
                 else
                 {
-                    if (HomePhone != "" && MobilePhone != "" && WorkPhone != "" && Email != "" && Email2 != "" && Email3 != "" && Address != "")
+                    string name = FirstName + " " + LastName + Address;
+                    if(HomePhone != "")
                     {
-                        return (FirstName + CleanUp(LastName) + "\r\n" + CleanUp(Address) + "\r\n"
-                        + "H:" + CleanUp(HomePhone) + "M:" + CleanUp(MobilePhone) + "W:" + CleanUp(WorkPhone) + "\r\n"
-                        + CleanUp(Email) + CleanUp(Email2) + CleanUp(Email3)
-                        ).Trim();
+                        name = name + "H: " + HomePhone;
                     }
-                    else
+                    if (MobilePhone != "")
                     {
-                        return (FirstName + CleanUp(LastName)).Trim();
+                        name = name + "M: " + MobilePhone;
                     }
+                    if (WorkPhone != "")
+                    {
+                        name = name + "W: " + WorkPhone;
+                    }
+                    return Regex.Replace(name + Email + Email2 + Email3, "\\r\\n", "").Trim();
                 }
             }
             set
@@ -81,6 +84,14 @@ namespace WebAddressbookTests
                 allPhones = value;
             }
         }
+
+        //private string AddBr(string element)
+        //{
+           // string name = (element != "") ? element + "\r\n" : "\r\n";
+
+            //return name;
+       // }
+
 
         private string CleanUp(string phone)
         {

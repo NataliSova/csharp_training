@@ -23,6 +23,14 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public int GetNumberOfSearchResult()
+        {
+            manager.Navigator.OpenHomePage();
+            string text = driver.FindElement(By.TagName("label")).Text;
+            Match m = new Regex(@"\d+").Match(text);
+            return Int32.Parse(m.Value);
+        }
+
         public ContactData GetContactInformationFromDetails(int index)
         {
             manager.Navigator.OpenHomePage();
@@ -31,11 +39,11 @@ namespace WebAddressbookTests
             string text = driver.FindElement(By.CssSelector("div#content")).Text;
 
             string name = driver.FindElement(By.CssSelector("div#content b")).Text;
-            string[] nm = name.Split(' ');
+            string[] nm = name.Split();
 
             return new ContactData(nm[0], nm[1])
             {
-                AllData = Regex.Replace(text, "[ -()]", "")
+                AllData = text
             };
         }
 
