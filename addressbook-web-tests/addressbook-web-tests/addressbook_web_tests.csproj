@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>addressbook_web_tests</RootNamespace>
-
+	
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

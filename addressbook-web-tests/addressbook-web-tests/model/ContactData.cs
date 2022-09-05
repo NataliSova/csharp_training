@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
@@ -9,7 +10,7 @@ namespace WebAddressbookTests
         private string allEmails;
         private string allData;
 
-        public ContactData(string name, string surname)
+        public ContactData(string name = "", string surname = "")
         {
             FirstName = name;
             LastName = surname;
@@ -21,30 +22,89 @@ namespace WebAddressbookTests
             {
                 if (allData != null)
                 {
-                    return Regex.Replace(allData, "\\r\\n", "").Trim();
+                    return allData;
                 }
                 else
                 {
-                    string name = FirstName + " " + LastName + Address;
-                    if(HomePhone != "")
+                    string name = "";
+                    if (FirstName != "" || LastName != "")
+                    {
+                        name = FirstName + " " + LastName;
+                    }
+                    if (Address != "")
+                    {
+                        name = name + "\r\n" + Address;
+                    }
+                    if (HomePhone != "" || MobilePhone != "" || WorkPhone != "")
+                    {
+                        name = name + "\r\n\r\n";
+                    }
+                    if (HomePhone != "")
                     {
                         name = name + "H: " + HomePhone;
                     }
-                    if (MobilePhone != "")
+                    if (MobilePhone != "" && HomePhone != "")
+                    {
+                        name = name + "\r\n" + "M: " + MobilePhone;
+                    }
+                    else if(MobilePhone != "" && HomePhone == "")
                     {
                         name = name + "M: " + MobilePhone;
                     }
-                    if (WorkPhone != "")
+                    if (WorkPhone != "" && (HomePhone != "" || MobilePhone != ""))
+                    {
+                        name = name + "\r\n" + "W: " + WorkPhone;
+                    }
+                    else if (WorkPhone != "" && HomePhone == "" && MobilePhone == "")
                     {
                         name = name + "W: " + WorkPhone;
                     }
-                    return Regex.Replace(name + Email + Email2 + Email3, "\\r\\n", "").Trim();
+                    if (Email != "" || Email2 != "" || Email3 != "")
+                    {
+                        name = name + "\r\n\r\n";
+                    }
+                    if (Email != "")
+                    {
+                        name = name + Email;
+                    }
+                    if (Email2 != "" && Email != "")
+                    {
+                        name = name + "\r\n" + Email2;
+                    }
+                    if (Email2 != "" && Email == "")
+                    {
+                        name = name + Email2;
+                    }
+                    if (Email3 != "" && (Email != "" || Email2 != ""))
+                    {
+                        name = name + "\r\n" + Email3;
+                    }
+                    if (Email3 != "" && Email == "" && Email2 == "")
+                    {
+                        name = name + Email3;
+                    }
+                    return name;
+
                 }
             }
             set
             {
                 allData = value;
             }
+        }
+
+        public string Return_String(List<string> list_string)
+        {
+            string str = "";
+
+            for (int i = 0; i < list_string.Count; i++)
+            {
+                if (i != list_string.Count - 1)
+                    str += list_string[i] + "\r\n";
+                else
+                    str += list_string[i] + "\r\n\r\n";
+            }
+            return str;
         }
 
         public string AllEmails 
@@ -87,10 +147,10 @@ namespace WebAddressbookTests
 
         //private string AddBr(string element)
         //{
-           // string name = (element != "") ? element + "\r\n" : "\r\n";
+            //string name = (element != "") ? element + "\r\n" : "";
 
             //return name;
-       // }
+        //}
 
 
         private string CleanUp(string phone)
@@ -99,7 +159,7 @@ namespace WebAddressbookTests
             {
                 return "";
             }
-            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
+            return Regex.Replace(phone, @"[ -()]", "") + "\r\n";
         }
 
         public string Group { get; set; }
