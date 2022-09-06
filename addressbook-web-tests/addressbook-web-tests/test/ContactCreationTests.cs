@@ -7,7 +7,7 @@ namespace WebAddressbookTests.test
     [TestFixture]
     public class ContactCreationTests : AuthTestBase
     {
-        public static IEnumerable<ContactData> RendomContactDataProvider()
+        public static IEnumerable<ContactData> RandomContactDataProvider()
         {
             List<ContactData> contact = new List<ContactData>();
             for (int i = 0; i < 5; i++)
@@ -23,10 +23,10 @@ namespace WebAddressbookTests.test
         }
 
 
-        [Test]
-        public void ContactCreationTest()
+        [Test, TestCaseSource("RandomContactDataProvider")]
+        public void ContactCreationTest(ContactData contactData)
         {
-            ContactData contactData = new ContactData("First", "Last");
+            //ContactData contactData = new ContactData("First", "Last");
 
             List<ContactData> oldContacts = app.Contacts.GetContactList();
             if (oldContacts.Count != 0)
