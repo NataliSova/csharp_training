@@ -27,7 +27,15 @@ namespace WebAddressbookTests
                 else
                 {
                     string name = "";
-                    if (FirstName != "" || LastName != "")
+                    if (FirstName != "" && LastName == "")
+                    {
+                        name = FirstName + "\r\n";
+                    }
+                    if (FirstName == "" && LastName != "")
+                    {
+                        name = LastName + "\r\n";
+                    }
+                    if (FirstName != "" && LastName != "")
                     {
                         name = FirstName + " " + LastName;
                     }

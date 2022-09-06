@@ -38,10 +38,9 @@ namespace WebAddressbookTests
 
             string text = driver.FindElement(By.CssSelector("div#content")).Text;
 
-            string name = driver.FindElement(By.CssSelector("div#content b")).Text;
-            string[] nm = name.Split();
+            //string name = driver.FindElement(By.CssSelector("div#content b")).Text;
 
-            return new ContactData(nm[0], nm[1])
+            return new ContactData()
             {
                 AllData = text
             };
