@@ -1,9 +1,12 @@
-﻿using System;
+﻿using LinqToDB.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace WebAddressbookTests
 {
+    [Table(Name = "addressbook")]
     public class ContactData: IEquatable<ContactData>, IComparable<ContactData>
     { 
         private string allPhones;
@@ -174,14 +177,19 @@ namespace WebAddressbookTests
 
         public string Group { get; set; }
 
+        [Column(Name = "id"), PrimaryKey]
         public string Id { get; set; }
 
+        [Column(Name = "firstname")]
         public string FirstName { get; set; }
 
+        [Column(Name = "middlename")]
         public string MiddleName { get; set; }
 
+        [Column(Name = "lastname")]
         public string LastName { get; set; }
 
+        [Column(Name = "nickname")]
         public string Nickname { get; set; }
 
         public string Photo { get; set; }
@@ -190,20 +198,27 @@ namespace WebAddressbookTests
 
         public string Company { get; set; }
 
+        [Column(Name = "address")]
         public string Address { get; set; }
 
+        [Column(Name = "home")]
         public string HomePhone { get; set; }
 
+        [Column(Name = "mobile")]
         public string MobilePhone { get; set; }
 
+        [Column(Name = "work")]
         public string WorkPhone { get; set; }
 
         public string Fax { get; set; }
 
+        [Column(Name = "email")]
         public string Email { get; set; }
 
+        [Column(Name = "email2")]
         public string Email2 { get; set; }
 
+        [Column(Name = "email3")]
         public string Email3 { get; set; }
 
         public string Homepage { get; set; }
@@ -219,6 +234,9 @@ namespace WebAddressbookTests
         public string SecondaryNotes { get; set; }
 
         public string Year { get; set; }
+
+        [Column(Name = "deprecated")]
+        public string Deprecated { get; set; }
 
         public bool Equals(ContactData other)
         {
@@ -257,6 +275,16 @@ namespace WebAddressbookTests
             if(i != 0) return i;
 
             return other.LastName.CompareTo(LastName);
+        }
+
+        public static List<ContactData> GetAll()
+        {
+            using (AddressbookDB db = new AddressbookDB())
+            {
+                List<ContactData> contacts = new List<ContactData>();
+                contacts = (from c in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") select c).ToList();
+                return contacts;
+            }
         }
     }
 }

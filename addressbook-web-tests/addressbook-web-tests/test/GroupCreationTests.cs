@@ -10,7 +10,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 namespace WebAddressbookTests.test
 {
     [TestFixture]
-    public class GroupCreationTests : AuthTestBase
+    public class GroupCreationTests : GroupTestBase
     {
         public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
@@ -81,7 +81,7 @@ namespace WebAddressbookTests.test
         [Test, TestCaseSource("GroupDataFromJsonFile")]
         public void GroupCreationTest(GroupData group)
         {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
 
             GroupData oldGroup = oldGroups[0];
 
@@ -89,7 +89,7 @@ namespace WebAddressbookTests.test
 
             Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
 
-            List<GroupData> newgroups = app.Groups.GetGroupList();
+            List<GroupData> newgroups = GroupData.GetAll();
             oldGroups.Add(group);
             oldGroups.Sort();
             newgroups.Sort();
@@ -132,6 +132,23 @@ namespace WebAddressbookTests.test
                     Assert.AreEqual(gr.Name, group.Name);
                 }
             }
+        }
+
+        [Test]
+        public void TestDBConnect()
+        {
+            //DateTime start = new DateTime();
+            //List<GroupData> fromUi = app.Groups.GetGroupList();
+            //DateTime end = new DateTime();
+            //System.Console.Out.WriteLine(end.Subtract(start));
+            //start = new DateTime();     
+            //List<GroupData> fromDb = GroupData.GetAll();
+            //end = new DateTime();
+            //System.Console.Out.WriteLine(end.Subtract(start));
+
+            foreach(ContactData contact in GroupData.GetAll()[0].GetContacts()){
+                System.Console.Out.WriteLine(contact.Deprecated);
+            };
         }
     }
 }

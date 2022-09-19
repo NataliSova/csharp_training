@@ -2,7 +2,6 @@
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
@@ -106,6 +105,13 @@ namespace WebAddressbookTests
                 .FindElement(By.TagName("a")).Click();
         }
 
+
+        public void ContactModificationClick(string idContact)
+        {
+            Regex rx = new Regex(@"edit.php?id=" + idContact);
+            driver.FindElement(By.XPath("(//a[@href='" + rx + "'])")).Click();      
+        }
+
         private List<ContactData> contactCache = null;
 
         public List<ContactData> GetContactList()
@@ -160,6 +166,18 @@ namespace WebAddressbookTests
             manager.Navigator.ReturnToHomePage();
             return this;
         }
+
+        public ContactHelper ModifyContact(string id, ContactData contactData)
+        {
+            manager.Navigator.OpenHomePage();
+            //EditSelectContact(c);
+            ContactModificationClick(id);
+            InitNewContactCreation(contactData);
+            SubmitContactUpdate();
+            manager.Navigator.ReturnToHomePage();
+            return this;
+        }
+
         public ContactHelper Remove(int c)
         {
             manager.Navigator.OpenHomePage();
@@ -168,9 +186,26 @@ namespace WebAddressbookTests
             SubmitContactDelete();
             return this;
         }
+
+        public ContactHelper Remove(string contact)
+        {
+            manager.Navigator.OpenHomePage();
+            SelectContact(contact);
+            ContactDeleteClick();
+            return this;
+        }
+
         private ContactHelper SubmitContactDelete()
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            contactCache = null;
+            return this;
+        }
+
+        private ContactHelper ContactDeleteClick()
+        {
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            driver.SwitchTo().Alert().Accept();
             contactCache = null;
             return this;
         }
@@ -232,6 +267,37 @@ namespace WebAddressbookTests
             Type(By.Name("phone2"), contactData.SecondaryHome);
             Type(By.Name("notes"), contactData.SecondaryNotes);
             return this;
+        }
+
+        public void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.OpenHomePage();
+            ClearGroupFilter();
+            SelectContact(contact.Id);
+            SelectGroupToAdd(group.Name);
+            CommitAddingContactToGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                //.Until(d => d.FindElement(By.CssSelector("div.msgbox")).);
+        }
+
+        public void CommitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        public void SelectGroupToAdd(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByText(name);
+        }
+
+        public void SelectContact(string contactId)
+        {
+            driver.FindElement(By.Id(contactId)).Click();
+        }
+
+        public void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
         }
     }
 }
