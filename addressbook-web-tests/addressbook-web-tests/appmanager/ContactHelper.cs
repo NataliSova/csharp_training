@@ -3,6 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace WebAddressbookTests
 {
@@ -276,8 +277,8 @@ namespace WebAddressbookTests
             SelectContact(contact.Id);
             SelectGroupToAdd(group.Name);
             CommitAddingContactToGroup();
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                //.Until(d => d.FindElement(By.CssSelector("div.msgbox")).);
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
         }
 
         public void CommitAddingContactToGroup()
@@ -298,6 +299,28 @@ namespace WebAddressbookTests
         public void ClearGroupFilter()
         {
             new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
+
+        public void DeleteContactFromGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.OpenHomePage();
+            ClearGroupFilter();
+            SelectGroupFromDelete(group.Name);
+            SelectContact(contact.Id);
+            ContactDeleteFromGroupClick(group.Name);
+        }
+
+        public void SelectGroupFromDelete(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText(name);
+        }
+
+        private ContactHelper ContactDeleteFromGroupClick(string name)
+        {
+            Regex rx = new Regex(@"Remove from " + "\"" + name + "\"");
+            driver.FindElement(By.XPath("//input[@value='" + rx + "']")).Click();
+            contactCache = null;
+            return this;
         }
     }
 }
