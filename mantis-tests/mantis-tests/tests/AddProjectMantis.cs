@@ -21,27 +21,41 @@ namespace mantis_tests
                 Name = "test"
             };
             
-            List<ProjectData> oldProjects = ProjectData.GetAll();
-            int i = 0;
-            foreach (ProjectData data in oldProjects)
+            List<ProjectData> oldProjects = app.ProjectManagement.GetAllProjects();
+
+            ProjectData existingAccount = oldProjects.Find(x => x.Name == project.Name);
+
+            if (existingAccount != null)
             {
-                if(data.Name == "test")
-                {
-                    project.Name = data.Name + i;
-                }
-                i++;
+                app.ProjectManagement.RemoveProject(existingAccount);
             }
-            //ProjectData oldProject = oldProjects[0];
 
             app.ProjectManagement.CreateProject(project);
 
             //Assert.AreEqual(oldProjects.Count + 1, app.Groups.GetGroupCount());
 
-            List<ProjectData> newProject = ProjectData.GetAll();
+            List<ProjectData> newProject = app.ProjectManagement.GetAllProjects();
             oldProjects.Add(project);
             oldProjects.Sort();
             newProject.Sort();
             Assert.AreEqual(oldProjects, newProject);
+        }
+
+        [Test]
+        public void AddNewProgectTest()
+        {
+            AccountData account = new AccountData()
+            {
+                Name = "administrator",
+                Password = "root"
+            };
+
+            ProjectData project = new ProjectData()
+            {
+                Name = "NewProject"
+            };
+
+            app.API.CreateNewProject(account, project);
         }
     }
 }

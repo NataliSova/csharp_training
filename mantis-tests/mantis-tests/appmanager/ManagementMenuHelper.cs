@@ -36,11 +36,11 @@ namespace mantis_tests
 
         public void OpenHomePage()
         {
-            if (driver.Url == baseURL + "/mantisbt-2.25.2/account_page.php")
+            if (driver.Url == baseURL + "/account_page.php")
             {
                 return;
             }
-            driver.Navigate().GoToUrl(baseURL + "/mantisbt-2.25.2/account_page.php");
+            driver.Navigate().GoToUrl(baseURL + "/account_page.php");
         }
         private void GoToManagement()
         {

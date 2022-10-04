@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using SimpleBrowser.WebDriver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,6 @@ namespace mantis_tests
             SubmitProjectAdd();
         }
 
-
         public void RemoveProject(ProjectData project)
         {
             OpenAllProjectPage();
@@ -33,8 +33,6 @@ namespace mantis_tests
             DeleteProjectClick();
             DeleteProjectYes();
         }
-
-        
 
         public void ProjectModificationClick(string id)
         {
@@ -59,20 +57,20 @@ namespace mantis_tests
 
         public void OpenCreateProjectPage()
         {
-            if (driver.Url == baseURL + "/mantisbt-2.25.2/manage_proj_create_page.php")
+            if (driver.Url == baseURL + "/manage_proj_create_page.php")
             {
                 return;
             }
-            driver.Navigate().GoToUrl(baseURL + "/mantisbt-2.25.2/manage_proj_create_page.php");
+            driver.Navigate().GoToUrl(baseURL + "/manage_proj_create_page.php");
         }
 
         public void OpenAllProjectPage()
         {
-            if (driver.Url == baseURL + "/mantisbt-2.25.2/manage_proj_page.php")
+            if (driver.Url == baseURL + "/manage_proj_page.php")
             {
                 return;
             }
-            driver.Navigate().GoToUrl(baseURL + "/mantisbt-2.25.2/manage_proj_page.php");
+            driver.Navigate().GoToUrl(baseURL + "/manage_proj_page.php");
         }
 
         private void CreateProjectClick()
@@ -94,6 +92,40 @@ namespace mantis_tests
         public void SubmitProjectAdd()
         {
             driver.FindElement(By.XPath("//input[@value='Добавить проект']")).Click();
+        }
+
+        public List<ProjectData> GetAllProjects()
+        {
+            List<ProjectData> accounts = new List<ProjectData>();
+            //IWebDriver driver = OpenAppAndLogin();
+            driver.Url = baseURL + "/manage_proj_page.php";
+            //IList<IWebElement> rows = driver.FindElements(By.Name("table"));
+            IList<IWebElement> rows = driver.FindElements(By.XPath("//div[@id='main-container']/div[2]/div[2]/div/div/div[2]/div[2]/div/div[2]/table/tbody/tr"));
+            foreach (IWebElement row in rows)
+            {
+                IWebElement link = row.FindElement(By.TagName("a"));
+                string name = link.Text;
+                string href = link.GetAttribute("href");
+                Match m = Regex.Match(href, @"\d+$");
+                string id = m.Value;
+
+                accounts.Add(new ProjectData()
+                {
+                    Name = name,
+                    Id = id
+                });
+            }
+            return accounts;
+        }
+
+        private IWebDriver OpenAppAndLogin()
+        {
+            IWebDriver driver = new SimpleBrowserDriver();
+            driver.Url = baseURL + "/login_page.php";
+            driver.FindElement(By.Name("username")).SendKeys("administrator");
+            driver.FindElement(By.Name("password")).SendKeys("root");
+            driver.FindElement(By.CssSelector("input.button")).Click();
+            return driver;
         }
     }
 }

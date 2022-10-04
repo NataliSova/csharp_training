@@ -12,15 +12,27 @@ namespace mantis_tests
         [Test]
         public void TestDeleteProjectMantis()
         {
-            List<ProjectData> oldProjects = ProjectData.GetAll();
-            if(oldProjects.Count == 0)
+            List<ProjectData> oldProjects = app.ProjectManagement.GetAllProjects();
+            if (oldProjects.Count == 0)
             {
-                ProjectData project = new ProjectData();
-                project.Name = "aaa";
-                app.ProjectManagement.CreateProject(project);
+                //ProjectData project = new ProjectData();
+                //project.Name = "aaa";
+                // app.ProjectManagement.CreateProject(project);
+                AccountData account = new AccountData()
+                {
+                    Name = "administrator",
+                    Password = "root"
+                };
+
+                ProjectData project = new ProjectData()
+                {
+                    Name = "NewProject"
+                };
+
+                app.API.CreateNewProject(account, project);
             }
 
-            oldProjects = ProjectData.GetAll();
+            oldProjects = app.ProjectManagement.GetAllProjects();
 
             ProjectData toBeRemoved = oldProjects[0];
 
@@ -28,7 +40,7 @@ namespace mantis_tests
 
             //Assert.AreEqual(oldGroups.Count - 1, app.Groups.GetGroupCount());
 
-            List<ProjectData> newProject = ProjectData.GetAll();
+            List<ProjectData> newProject = app.ProjectManagement.GetAllProjects();
 
             oldProjects.RemoveAt(0);
             oldProjects.Sort();

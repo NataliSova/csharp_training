@@ -45,6 +45,7 @@ namespace WebAddressbookTests.test
                     oldList = group.GetContacts();
                 }
             }
+            allContact = ContactData.GetAll();
             contact = allContact.Except(oldList).First();
             app.Contacts.AddContactToGroup(contact, group);
             oldList.Add(contact);
