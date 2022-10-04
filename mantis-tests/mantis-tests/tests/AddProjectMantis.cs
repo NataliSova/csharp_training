@@ -29,6 +29,7 @@ namespace mantis_tests
             {
                 app.ProjectManagement.RemoveProject(existingAccount);
             }
+            oldProjects = app.ProjectManagement.GetAllProjects();
 
             app.ProjectManagement.CreateProject(project);
 
