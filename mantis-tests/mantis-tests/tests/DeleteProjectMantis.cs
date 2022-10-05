@@ -23,14 +23,9 @@ namespace mantis_tests
             {
                 ProjectData project = new ProjectData();
                 project.Name = "aaa";
-                app.ProjectManagement.CreateProject(project);
+                //app.ProjectManagement.CreateProject(project);
 
-               // ProjectData project = new ProjectData()
-                //{
-                    //Name = "NewProject"
-                //};
-
-                //app.API.CreateNewProject(account, project);
+                app.API.CreateNewProject(account, project);
             }
 
             //oldProjects = app.ProjectManagement.GetAllProjects();
