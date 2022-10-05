@@ -21,16 +21,16 @@ namespace mantis_tests
             List<ProjectData> oldProjects = app.API.GetAllProjectsApi(account);
             if (oldProjects.Count == 0)
             {
-                //ProjectData project = new ProjectData();
-                //project.Name = "aaa";
-                // app.ProjectManagement.CreateProject(project);
+                ProjectData project = new ProjectData();
+                project.Name = "aaa";
+                app.ProjectManagement.CreateProject(project);
 
-                ProjectData project = new ProjectData()
-                {
-                    Name = "NewProject"
-                };
+               // ProjectData project = new ProjectData()
+                //{
+                    //Name = "NewProject"
+                //};
 
-                app.API.CreateNewProject(account, project);
+                //app.API.CreateNewProject(account, project);
             }
 
             //oldProjects = app.ProjectManagement.GetAllProjects();
